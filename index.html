@@ -42,7 +42,6 @@
         
         const lyrics = [
             "I can't even describe it",
-            "If I could then I would say it",
             "Fantasies about you in my bedroom",
             "I been praying",
             "We go 'round and 'round again",
@@ -78,7 +77,7 @@
             const audio = document.getElementById('myAudio');
             audio.play().catch(e => console.log("Audio play failed"));
 
-            // STOP MUSIC AFTER 50 SECONDS
+            // STOP MUSIC AFTER 48 SECONDS
             setTimeout(() => {
                 let fadeEffect = setInterval(() => {
                     if (audio.volume > 0.1) {
@@ -88,7 +87,7 @@
                         audio.pause();
                     }
                 }, 200);
-            }, 50000); 
+            }, 48000); // 48000 milliseconds = 48 seconds
 
             const stack = document.getElementById('stack');
             const hint = document.getElementById('tap-hint');
