@@ -34,14 +34,14 @@
 
     <div id="screen-main" class="screen hidden">
         <div class="stack-container" id="stack"><div id="tap-hint">Tap to flip ✨</div></div>
-        <div class="lyrics-box"><p id="lyric-text">I can't even describe it...</p></div>
+        <div class="lyrics-box"><p id="lyric-text">I can't even describe it, and if I could I would say it</p></div>
     </div>
 
     <script>
         const box = document.getElementById('content-box');
         
         const lyrics = [
-            "I can't even describe it",
+            "I can't even describe it, and if I could I would say it",
             "Fantasies about you in my bedroom",
             "I been praying",
             "We go 'round and 'round again",
@@ -87,7 +87,7 @@
                         audio.pause();
                     }
                 }, 200);
-            }, 48000); // 48000 milliseconds = 48 seconds
+            }, 48000); 
 
             const stack = document.getElementById('stack');
             const hint = document.getElementById('tap-hint');
