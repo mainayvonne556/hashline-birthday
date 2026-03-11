@@ -47,13 +47,7 @@
             "We go 'round and 'round again",
             "On weekends when you stay",
             "Every love story is beautiful",
-            "But ours is my favorite",
-            "Yeah, ours is my favorite, oh yeah",
-            "Ours is my favorite",
-            "Yeah, ours is my favorite",
-            "Ours is my favorite",
-            "Yeah, ours is my favorite",
-            "Ours is my favorite ❤️"
+            "But ours is my favorite ❤️"
         ];
 
         async function runSurprise() {
@@ -77,7 +71,6 @@
             const audio = document.getElementById('myAudio');
             audio.play().catch(e => console.log("Audio play failed"));
 
-            // STOP MUSIC AFTER 48 SECONDS
             setTimeout(() => {
                 let fadeEffect = setInterval(() => {
                     if (audio.volume > 0.1) {
@@ -103,8 +96,13 @@
                     
                     this.classList.add('flipped');
                     idx++;
-                    if(lyrics[idx % lyrics.length]) {
-                        document.getElementById('lyric-text').innerText = lyrics[idx % lyrics.length];
+                    
+                    // If we have a lyric for this index, show it. 
+                    // If we run out of lyrics, keep showing the last one (The Favorite part)
+                    if (idx < lyrics.length) {
+                        document.getElementById('lyric-text').innerText = lyrics[idx];
+                    } else {
+                        document.getElementById('lyric-text').innerText = "But ours is my favorite ❤️";
                     }
                 };
                 stack.appendChild(p);
