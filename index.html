@@ -40,7 +40,6 @@
     <script>
         const box = document.getElementById('content-box');
         
-        // Updated Lyrics: Isabel LaRosa - Favorite
         const lyrics = [
             "I can't even describe it",
             "If I could then I would say it",
@@ -52,25 +51,21 @@
             "But ours is my favorite",
             "Yeah, ours is my favorite, oh yeah",
             "Ours is my favorite",
-            "You my number one fanatic",
-            "Cinematic...",
-            "Making movies in your attic",
-            "Outta habit",
-            "Switch positions, acrobatic...",
-            "So ecstatic ❤️"
+            "Yeah, ours is my favorite",
+            "Ours is my favorite",
+            "Yeah, ours is my favorite",
+            "Ours is my favorite ❤️"
         ];
 
         async function runSurprise() {
             document.getElementById('screen-start').classList.add('hidden');
             document.getElementById('screen-sequence').classList.remove('hidden');
             
-            // Countdown
             for (let i = 3; i > 0; i--) { 
                 box.innerHTML = `<div id="count-num">${i}</div>`; 
                 await new Promise(r => setTimeout(r, 1000)); 
             }
 
-            // Reveal Text
             const words = ["Happy", "Birthday", "To my one and only", "Hashline 🌸✨"];
             for (let w of words) { 
                 box.innerHTML = `<div class="reveal-text">${w}</div>`; 
@@ -80,9 +75,20 @@
             document.getElementById('screen-sequence').classList.add('hidden');
             document.getElementById('screen-main').classList.remove('hidden');
 
-            // --- MUSIC STARTS IMMEDIATELY WHEN PICTURES APPEAR ---
             const audio = document.getElementById('myAudio');
-            audio.play().catch(e => console.log("Audio play failed: " + e));
+            audio.play().catch(e => console.log("Audio play failed"));
+
+            // STOP MUSIC AFTER 50 SECONDS
+            setTimeout(() => {
+                let fadeEffect = setInterval(() => {
+                    if (audio.volume > 0.1) {
+                        audio.volume -= 0.1;
+                    } else {
+                        clearInterval(fadeEffect);
+                        audio.pause();
+                    }
+                }, 200);
+            }, 50000); 
 
             const stack = document.getElementById('stack');
             const hint = document.getElementById('tap-hint');
@@ -98,7 +104,6 @@
                     
                     this.classList.add('flipped');
                     idx++;
-                    // Cycle through the new lyrics
                     if(lyrics[idx % lyrics.length]) {
                         document.getElementById('lyric-text').innerText = lyrics[idx % lyrics.length];
                     }
@@ -123,4 +128,3 @@
     </script>
 </body>
 </html>
-            
