@@ -11,15 +11,48 @@
         .hidden { display: none !important; }
         .reveal-text { font-size: 2.5rem; color: #ffb6c1; text-shadow: 0 0 15px #ff69b4; font-weight: bold; animation: fadeIn 0.8s forwards; }
         #count-num { font-size: 7rem; color: #ffb6c1; font-weight: bold; text-shadow: 0 0 25px #ff69b4; }
-        .stack-container { position: relative; width: 280px; height: 380px; perspective: 1000px; margin-top: 10px; }
+        
+        /* Floating Hearts Animation */
+        .floating-heart {
+            position: fixed;
+            color: #ff69b4;
+            font-size: 20px;
+            pointer-events: none;
+            z-index: 15;
+            animation: floatUp 4s linear forwards;
+            opacity: 0.8;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            20% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(20deg); opacity: 0; }
+        }
+
+        /* Stack & Photos */
+        .stack-container { position: relative; width: 280px; height: 380px; perspective: 1000px; margin-top: 10px; z-index: 5; }
         .photo { position: absolute; inset: 0; border: 8px solid #fff; border-radius: 4px; background-size: cover; background-position: center; transition: transform 0.7s ease, opacity 0.5s; cursor: pointer; box-shadow: 0 5px 25px rgba(0,0,0,0.8); z-index: 5; }
         .photo.flipped { transform: translateX(180%) rotate(30deg); opacity: 0; }
+        
         #tap-hint { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ff69b4; color: white; padding: 8px 16px; border-radius: 20px; z-index: 100; animation: bounce 1.5s infinite; pointer-events: none; }
         @keyframes bounce { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -60%) scale(1.1); } }
+        
         .lyrics-box { position: fixed; bottom: 40px; width: 100%; text-align: center; z-index: 20; padding: 0 10px; box-sizing: border-box; }
         #lyric-text { color: #ffb6c1; font-size: 1.1rem; font-style: italic; text-shadow: 1px 1px 5px #000; }
         .start-btn { padding: 20px 40px; background: #ff69b4; color: white; border: none; border-radius: 40px; font-size: 1.2rem; font-weight: bold; cursor: pointer; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        
+        /* Heart Finale Layout */
+        #screen-heart { background: rgba(0,0,0,0.85); z-index: 100; }
+        .heart-layout { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr); gap: 8px; width: 320px; height: 320px; margin: auto; position: relative; }
+        .heart-photo { background-size: cover; background-position: center; border: 2px solid #fff; border-radius: 4px; box-shadow: 0 2px 10px rgba(255,105,180,0.3); }
+        #all-mine-text { grid-column: 2 / 5; grid-row: 3 / 4; color: #ffb6c1; font-size: 2.2rem; font-weight: bold; text-shadow: 0 0 20px #ff69b4; display: flex; align-items: center; justify-content: center; z-index: 10; animation: pulse 1.5s infinite alternate; }
+
+        .hp-1 { grid-column: 2; grid-row: 1; } .hp-2 { grid-column: 4; grid-row: 1; }
+        .hp-3 { grid-column: 1; grid-row: 2; } .hp-4 { grid-column: 2; grid-row: 2; } .hp-5 { grid-column: 3; grid-row: 2; } .hp-6 { grid-column: 4; grid-row: 2; } .hp-7 { grid-column: 5; grid-row: 2; }
+        .hp-8 { grid-column: 1; grid-row: 3; } .hp-9 { grid-column: 5; grid-row: 3; }
+        .hp-10 { grid-column: 2; grid-row: 4; } .hp-11 { grid-column: 3; grid-row: 4; } .hp-12 { grid-column: 4; grid-row: 4; }
+        .hp-13 { grid-column: 3; grid-row: 5; }
+
+        @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
     </style>
 </head>
 <body>
@@ -37,9 +70,14 @@
         <div class="lyrics-box"><p id="lyric-text">I can't even describe it, and if I could I would say it</p></div>
     </div>
 
+    <div id="screen-heart" class="screen hidden">
+        <div class="heart-layout" id="heart-grid">
+            <div id="all-mine-text">ALL MINE ❤️</div>
+        </div>
+    </div>
+
     <script>
         const box = document.getElementById('content-box');
-        
         const lyrics = [
             "I can't even describe it, and if I could I would say it",
             "Fantasies about you in my bedroom",
@@ -49,6 +87,16 @@
             "Every love story is beautiful",
             "But ours is my favorite ❤️"
         ];
+
+        function spawnHeart() {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️';
+            heart.className = 'floating-heart';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 4000);
+        }
 
         async function runSurprise() {
             document.getElementById('screen-start').classList.add('hidden');
@@ -68,9 +116,12 @@
             document.getElementById('screen-sequence').classList.add('hidden');
             document.getElementById('screen-main').classList.remove('hidden');
 
+            setInterval(spawnHeart, 500);
+
             const audio = document.getElementById('myAudio');
             audio.play().catch(e => console.log("Audio play failed"));
 
+            // SONG TIMER: 1 MINUTE AND 3 SECONDS
             setTimeout(() => {
                 let fadeEffect = setInterval(() => {
                     if (audio.volume > 0.1) {
@@ -80,35 +131,51 @@
                         audio.pause();
                     }
                 }, 200);
-            }, 48000); 
+            }, 63000); 
 
             const stack = document.getElementById('stack');
             const hint = document.getElementById('tap-hint');
-            let idx = 0;
+            let flippedCount = 0;
+            const TOTAL_PHOTOS = 15;
 
-            for(let i = 15; i >= 1; i--) {
+            for(let i = TOTAL_PHOTOS; i >= 1; i--) {
                 const p = document.createElement('div');
                 p.className = 'photo';
                 p.style.backgroundImage = `url('photo${i}.jpg')`; 
                 p.onclick = function() {
                     if (hint) hint.classList.add('hidden');
                     if (this.classList.contains('flipped')) return;
-                    
                     this.classList.add('flipped');
-                    idx++;
+                    flippedCount++;
                     
-                    // If we have a lyric for this index, show it. 
-                    // If we run out of lyrics, keep showing the last one (The Favorite part)
-                    if (idx < lyrics.length) {
-                        document.getElementById('lyric-text').innerText = lyrics[idx];
+                    if (flippedCount < lyrics.length) {
+                        document.getElementById('lyric-text').innerText = lyrics[flippedCount];
                     } else {
                         document.getElementById('lyric-text').innerText = "But ours is my favorite ❤️";
+                    }
+
+                    if (flippedCount === TOTAL_PHOTOS) {
+                        setTimeout(showHeartFinale, 1000); 
                     }
                 };
                 stack.appendChild(p);
             }
         }
 
+        function showHeartFinale() {
+            document.getElementById('screen-main').classList.add('hidden');
+            document.getElementById('screen-heart').classList.remove('hidden');
+            const heartGrid = document.getElementById('heart-grid');
+            const heartMap = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+            heartMap.forEach((photoNum, index) => {
+                const hp = document.createElement('div');
+                hp.className = `heart-photo hp-${index + 1}`;
+                hp.style.backgroundImage = `url('photo${photoNum}.jpg')`;
+                heartGrid.appendChild(hp);
+            });
+        }
+
+        // Name Matrix Background
         const c = document.getElementById('matrix'), x = c.getContext('2d');
         c.width = window.innerWidth; c.height = window.innerHeight;
         const m = "HASHLINE♡🌸✨".split(""), d = Array(Math.floor(c.width/16)).fill(1);
@@ -125,3 +192,4 @@
     </script>
 </body>
 </html>
+            
